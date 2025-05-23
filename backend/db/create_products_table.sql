@@ -1,4 +1,4 @@
--- Create the products table with columns matching your productModel.js usage
+
 CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
     url TEXT UNIQUE NOT NULL,
@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS products (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create the price_history table for tracking price changes
 CREATE TABLE IF NOT EXISTS price_history (
     id SERIAL PRIMARY KEY,
     product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
@@ -18,3 +17,16 @@ CREATE TABLE IF NOT EXISTS price_history (
     checked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     email_sent BOOLEAN DEFAULT FALSE
 );
+
+
+CREATE TABLE IF NOT EXISTS alternate_prices (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
+    platform TEXT NOT NULL,
+    title TEXT,
+    url TEXT,
+    price NUMERIC,
+    scraped_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE products ADD COLUMN IF NOT EXISTS metadata JSONB;
